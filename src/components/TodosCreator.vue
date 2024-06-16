@@ -1,20 +1,45 @@
 <template>
     <div class="input-wrap">
         <!-- using v-model directive to sync todo variable up to the input  -->
-        <input type="text" v-model="todo"/>
-        <!-- <input type="text" v-model="todoState.todo"/> -->
-        <button>Creator</button>
+        <input type="text" v-model="todoState.todo"/>
+        <button @click="createTodo()">Creator</button>
     </div>
-    <p>{{ todo }}</p>
-    <!-- <p>{{ todoState.todo }}</p> -->
+    <!-- using v-if directive to show error message if we have an error -->
+    <!-- <p v-if="todoState.invalid" class="err-msg">{{ todoState.errMsg }}</p> -->
+
+    <!-- also we can use v-show for the same purpose of v-if -->
+    <p v-show="todoState.invalid" class="err-msg">{{ todoState.errMsg }}</p>
+
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, defineEmits } from 'vue';
 // using ref method to make our variable reactive with the input value
-    const todo= ref(" ref test");
+    // const todo= ref(" ref test");
+
     // also we can use reactive to make our variable reactive with the input value
-    // const todoState = reactive({todo: "reactive test",});
+    const todoState = reactive({
+        todo: "",
+        invalid: null,
+        errMsg: "",
+    });
+
+    // to emit data from our component to parent component of todosView
+    const emit = defineEmits(["create-todo"]);
+
+    const createTodo = () => {
+        // reset invalid value
+        todoState.invalid = null;
+
+        if(todoState.todo !== ""){
+            emit("create-todo", todoState.todo);
+            // reset todo value
+            todoState.todo = "";
+        }else{
+            todoState.invalid = true;
+            todoState.errMsg = "Todo value cannot be empty";
+        }
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -45,7 +70,8 @@ import { reactive, ref } from 'vue';
 
         .err-msg {
         margin-top: 6px;
-        font-size: 12px;
+        font-size: 20px;
+        font-weight: bold;
         text-align: center;
         color: red;
     }

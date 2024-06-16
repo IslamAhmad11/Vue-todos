@@ -1,11 +1,25 @@
 <script setup>
+  import { ref } from "vue";
+  import { uid } from "uid";
   import TodosCreator from "../components/TodosCreator.vue";
+  const todoList = ref([]);
+
+  const createTodos = (myTodo) => {
+    todoList.value.push({
+      // using uid for generating a unique id for each task
+      id: uid(),
+      myTodo,
+      isCompleted: null,
+      isEditing: null,
+    });
+  };
 </script>
 
 <template>
   <main>
     <h1>Create Todo</h1>
-    <TodosCreator/>
+    <!-- usin @ to call a custom emit from child component -->
+    <TodosCreator @create-todo="createTodos" />
   </main>
 </template>
 
