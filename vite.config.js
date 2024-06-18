@@ -16,3 +16,7 @@ export default defineConfig({
     }
   }
 })
+module.exports = {
+  publicPath: process.env.NODE_ENV === 'production' ? '/<https://github.com/IslamAhmad11/Vue-todos>/' : '/'
+}
+

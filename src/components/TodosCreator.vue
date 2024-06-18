@@ -1,8 +1,9 @@
 <template>
-    <div class="input-wrap">
+    <!-- adding a dynamic class (input-err) to be applied when todoState.invalid is true (this is called class binding)-->
+    <div class="input-wrap" :class="{'input-err': todoState.invalid}">
         <!-- using v-model directive to sync todo variable up to the input  -->
         <input type="text" v-model="todoState.todo"/>
-        <button @click="createTodo()">Creator</button>
+        <todoButton @click="createTodo()"/>
     </div>
     <!-- using v-if directive to show error message if we have an error -->
     <!-- <p v-if="todoState.invalid" class="err-msg">{{ todoState.errMsg }}</p> -->
@@ -14,6 +15,7 @@
 
 <script setup>
 import { reactive, ref, defineEmits } from 'vue';
+import TodoButton from './TodoButton.vue'
 // using ref method to make our variable reactive with the input value
     // const todo= ref(" ref test");
 
@@ -32,6 +34,7 @@ import { reactive, ref, defineEmits } from 'vue';
         todoState.invalid = null;
 
         if(todoState.todo !== ""){
+            // if the is valid send this emit with additional param which is todoState.todo
             emit("create-todo", todoState.todo);
             // reset todo value
             todoState.todo = "";
